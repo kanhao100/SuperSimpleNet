@@ -1,0 +1,11 @@
+common/__pycache__/*
+datamodules/__pycache__/*
+datasets/mvtec/*
+results/superSimpleNet/*
+test/*
+
+
+datamodules/base/__pycache__/*
+model/__pycache__/*
+data/cifar-10-python.tar.gz
+data/cifar-10-batches-py/data_batch_4

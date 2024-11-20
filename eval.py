@@ -58,6 +58,7 @@ def eval(
     }
     for batch in tqdm(test_loader, position=0, leave=True):
         image_batch = batch["image"].to(device)
+        # print("batch", image_batch.shape)
         anomaly_map, anomaly_score = model.forward(image_batch)
 
         anomaly_map = anomaly_map.detach().cpu()
@@ -395,7 +396,8 @@ def run_eval(datasets, run_id):
         for cat, datamodule in data_list:
             print("Evaluating", f"{dataset}-{cat}")
             weight_path = (
-                config["weights_path"] / config["run_id"] / dataset / cat / "weights.pt"
+                # config["weights_path"] / config["run_id"] / dataset / cat / "weights.pt"
+                Path("./results/superSimpleNet/checkpoints")  / dataset / cat / "weights.pt"
             )
             model = SuperSimpleNet(image_size=datamodule.image_size, config=config)
             model.load_model(weight_path)

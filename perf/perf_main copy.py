@@ -46,7 +46,6 @@ def prepare_model():
     }
     model = SuperSimpleNet(image_size=(256, 256), config=config)
     # model.load_model("./pcb1/weights.pt")
-    model.load_model("../results/superSimpleNet/checkpoints/mvtec/screw/weights.pt")
     model.to("cuda")
     model.to(torch.float16)
     model.eval()
@@ -187,7 +186,7 @@ def flops(reps=1000):
 
 def main():
     cycles = 2
-    reps = 1000
+    reps = 100
 
     torch.backends.cudnn.deterministic = True
 

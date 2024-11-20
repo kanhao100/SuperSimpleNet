@@ -615,7 +615,7 @@ def run_unsup(data_name):
         # "perlin_thr": x,
         "image_size": (256, 256),
         "seed": 42,
-        "batch": 32,
+        "batch": 16,
         "epochs": 300,
         "flips": False,  # makes no difference, just faster if false to avoid computation
         "seg_lr": 0.0002,
@@ -672,7 +672,7 @@ def run_sup(data_name):
 
 
 def main():
-    run_unsup(sys.argv[1])
+    # run_unsup(sys.argv[1])
     run_sup(sys.argv[1])
 
 

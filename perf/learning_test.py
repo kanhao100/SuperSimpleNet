@@ -86,6 +86,38 @@ def inference_speed(reps=1000):
     print("Speed in ms:", ms)
     return ms
 
+@torch.no_grad()
+def learning_fun(reps=1000):
+    model = prepare_model()
+    print(model)
+    img = prepare_image()
+
+    # # first - warmup
+    # for i in tqdm(range(reps), desc="Warmup"):
+    #     img = img.to("cpu")
+
+    #     img = img.to("cuda")
+    #     out = model(img)
+    #     out = out[0].to("cpu"), out[1].to("cpu")
+
+    # total_time = 0
+    # # next - real
+    # for i in tqdm(range(reps), desc="Timing inference"):
+    #     img = img.to("cpu")
+
+    #     t0 = timeit.default_timer()
+
+    #     img = img.to("cuda")
+    #     out = model(img)
+    #     out = out[0].to("cpu"), out[1].to("cpu")
+
+    #     t1 = timeit.default_timer()
+    #     total_time += t1 - t0
+
+    # # * 1000 to get ms
+    # ms = total_time * 1000 / reps
+    # print("Speed in ms:", ms)
+    # return ms
 
 @torch.no_grad()
 def throughput(reps=1000):
@@ -187,35 +219,37 @@ def flops(reps=1000):
 
 def main():
     cycles = 2
-    reps = 1000
+    reps = 100
 
     torch.backends.cudnn.deterministic = True
 
-    with open(f"perf_{sys.argv[1]}.csv", "w", encoding="utf-8", newline="") as csv_file:
-        writer = csv.writer(csv_file, delimiter=";")
-        writer.writerow(["time", "throughput", "memory", "tflops"])
-        for cyc in range(cycles):
-            ms = inference_speed(reps)
-            thru = throughput(reps)
-            mbs = memory(reps)
-            tflops = flops(reps)
+    learning_fun(reps)
 
-            if cyc == 0:
-                # skip first one, as the system is not warmed up and it's too fast
-                continue
+    # with open(f"perf_{sys.argv[1]}.csv", "w", encoding="utf-8", newline="") as csv_file:
+    #     writer = csv.writer(csv_file, delimiter=";")
+    #     writer.writerow(["time", "throughput", "memory", "tflops"])
+    #     for cyc in range(cycles):
+    #         ms = inference_speed(reps)
+    #         thru = throughput(reps)
+    #         mbs = memory(reps)
+    #         tflops = flops(reps)
 
-            writer.writerow([ms, thru, mbs, tflops])
-            print("-" * 42)
-            print("Speed [ms]:", ms)
-            print("Throughput:", thru)
-            print("Memory [MB]:", mbs)
-            print("TFLOPS:", tflops)
-            print("-" * 42)
+    #         if cyc == 0:
+    #             # skip first one, as the system is not warmed up and it's too fast
+    #             continue
+
+    #         writer.writerow([ms, thru, mbs, tflops])
+    #         print("-" * 42)
+    #         print("Speed [ms]:", ms)
+    #         print("Throughput:", thru)
+    #         print("Memory [MB]:", mbs)
+    #         print("TFLOPS:", tflops)
+    #         print("-" * 42)
 
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        raise ValueError("Usage: python perf_main.py <gpu_model>")
+    # if len(sys.argv) < 2:
+    #     raise ValueError("Usage: python perf_main.py <gpu_model>")
 
     main()
     # params()
